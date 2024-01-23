@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Selu383.SP24.Api.Entities;
 
 namespace Selu383.SP24.Api.Controllers
@@ -8,7 +7,6 @@ namespace Selu383.SP24.Api.Controllers
     [Route("[controller]")]
     public class HotelController : ControllerBase
     {
-
         private readonly ILogger<HotelController> _logger;
 
         public HotelController(ILogger<HotelController> logger)
@@ -19,16 +17,14 @@ namespace Selu383.SP24.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var entity = new Hotel
+            var Hotels = new Hotel
             {
                 Id = 1,
                 Name = "Hotel BnB",
                 Address = "1337 Hammond Drive"
             };
 
-            return Ok(entity);
+            return Ok(Hotels);
         }
     }
- 
 }
-
