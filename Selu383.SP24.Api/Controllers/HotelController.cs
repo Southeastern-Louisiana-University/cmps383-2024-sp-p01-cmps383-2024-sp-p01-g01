@@ -30,6 +30,10 @@ namespace Selu383.SP24.Api.Controllers
 
 
         /*
+         * 
+         * COME BACK TO BOTH OF THESE LATER
+         * 
+         * 
         [HttpPost]
         public ActionResult MakeHotel(HotelDto hotel)
         {
