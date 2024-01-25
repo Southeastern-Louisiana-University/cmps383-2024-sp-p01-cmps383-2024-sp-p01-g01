@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Selu383.SP24.Api.Entities;
 
 namespace Selu383.SP24.Api.Controllers
 {
