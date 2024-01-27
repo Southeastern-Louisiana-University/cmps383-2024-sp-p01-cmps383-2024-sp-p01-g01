@@ -28,10 +28,34 @@ namespace Selu383.SP24.Api.Controllers
             return Ok(Hotels);
         }
 
+        /*
+         * 
+         * THIS SHOULD WORK WHEN DATABASE IS UP
+         * 
+        [HttpDelete("{id}")]
+        public ActionResult<HotelDto> DeleteAppointment(int id)
+        {
+            var targetAppointment = DataContext.Set<Hotel>().FirstOrDefault(x => x.Id == id);
+            if (targetAppointment == null)
+            {
+                return NotFound();
+            }
+
+            DataContext.Set<Hotel>().Remove(targetAppointment);
+            DataContext.SaveChanges();
+
+            return Ok(new AppointmentDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Address = x.Address
+            });
+        }
+        */
 
         /*
          * 
-         * COME BACK TO BOTH OF THESE LATER
+         * THESE SHOULD WORK WHEN DATABASE IS UP
          * 
          * 
         [HttpPost]
@@ -48,7 +72,7 @@ namespace Selu383.SP24.Api.Controllers
         [HttpGet("all")]
         public List<HotelDto> GetAllHotels()
         {
-            return DataContext.Set<HotelDto>()
+            return
                 .Select(x => new HotelDto
                 {
                     Id = x.Id,
