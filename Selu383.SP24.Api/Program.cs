@@ -14,13 +14,13 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 // commit test
 
-/*
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
     db.Database.Migrate();
 }
-*/
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
