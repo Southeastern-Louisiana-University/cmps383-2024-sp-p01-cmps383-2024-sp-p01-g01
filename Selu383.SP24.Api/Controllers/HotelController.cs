@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Selu383.SP24.Api.Entities;
 using Selu383.SP24.Api.Controllers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Selu383.SP24.Api.Controllers
 {
@@ -9,23 +10,45 @@ namespace Selu383.SP24.Api.Controllers
     public class HotelController : ControllerBase
     {
         private readonly ILogger<HotelController> _logger;
+        private DataContext _context;
 
-        public HotelController(ILogger<HotelController> logger)
+        public HotelController(ILogger<HotelController> logger, DataContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            var Hotels = new Hotel
-            {
-                Id = 1,
-                Name = "Hotel BnB",
-                Address = "1337 Hammond Drive"
-            };
 
-            return Ok(Hotels);
+        [HttpGet]
+        public ActionResult<HotelDto[]> Get()
+        {
+            var result = _context.Hotels;
+            return Ok(result.Select(x => new HotelDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Address = x.Address,
+            }));
+        }
+
+
+        [HttpGet("{Id}")]
+        public ActionResult<HotelDto> Details([FromRoute] int Id)
+        { 
+
+            var HotelReturn = _context.Hotels.FirstOrDefault(x => x.Id == Id);
+
+            if (HotelReturn == null)
+            {
+                return NotFound($"Unable to find Id {Id}");
+            }
+
+            return Ok(new HotelDto
+            {
+                Id = HotelReturn.Id,
+                Name = HotelReturn.Name,
+                Address = HotelReturn.Address,
+            });
         }
 
         /*
@@ -53,32 +76,18 @@ namespace Selu383.SP24.Api.Controllers
         }
         */
 
-        
-         /*
-        [HttpPost]
-        public ActionResult MakeHotel(HotelDto hotel)
-        {
-            DataContext.Set<Hotel>().Add(new hotel);
-            DataContext.SaveChanges();
-
-            return Ok(hotel);
-        }
-        */
 
         /*
-        [HttpGet("all")]
-        public List<HotelDto> GetAllHotels()
-        {
-            return DataContext.Set<Hotel>()
-                .Select(x => new HotelDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Address = x.Address,
-                })
-                .ToList();
-        }
-        */
+       [HttpPost]
+       public ActionResult MakeHotel(HotelDto hotel)
+       {
+           DataContext.Set<Hotel>().Add(new hotel);
+           DataContext.SaveChanges();
+
+           return Ok(hotel);
+       }
+       */
+
 
 
     }
