@@ -40,7 +40,7 @@ namespace Selu383.SP24.Api.Controllers
 
             if (HotelReturn == null)
             {
-                return NotFound($"Unable to find Id {Id}");
+                return NotFound($"Can't find Id: {Id}");
             }
 
             return Ok(new HotelDto
@@ -51,42 +51,42 @@ namespace Selu383.SP24.Api.Controllers
             });
         }
 
-        /*
-         * 
-         *  EVERYTHING COMMENTED BELOW THIS SHOULD WORK WHEN DATABASE IS CONNECTED
-         * 
-        [HttpDelete("{id}")]
-        public ActionResult<HotelDto> DeleteAppointment(int id)
+        [HttpPost]
+        public ActionResult<HotelDto> Create(HotelDto Hotel)
         {
-            var targetHotel = DataContext.Set<Hotel>().FirstOrDefault(x => x.Id == id);
-            if (targetHotel == null)
+            if (string.IsNullOrEmpty(Hotel.Name))
             {
-                return NotFound();
+                return BadRequest("Must have a name");
+            }
+            if (Hotel.Name.Length > 120)
+            {
+                return BadRequest("Name must not be longer than 120 characters");
+            }
+            if (string.IsNullOrEmpty(Hotel.Address))
+            {
+                return BadRequest("Must have an address");
             }
 
-            DataContext.Set<Hotel>().Remove(targetHotel);
-            DataContext.SaveChanges();
-
-            return Ok(new HotelDto
+            var returnCreatedHotel = new Hotel
             {
-                Id = x.Id,
-                Name = x.Name,
-                Address = x.Address
-            });
+                Name = Hotel.Name,
+                Address = Hotel.Address,
+            };
+            _context.Hotels.Add(returnCreatedHotel);
+            _context.SaveChanges();
+
+            Hotel.Id = returnCreatedHotel.Id;
+
+            return CreatedAtAction(nameof(Details), new { Id = returnCreatedHotel.Id }, returnCreatedHotel);
+
         }
-        */
 
 
-        /*
-       [HttpPost]
-       public ActionResult MakeHotel(HotelDto hotel)
-       {
-           DataContext.Set<Hotel>().Add(new hotel);
-           DataContext.SaveChanges();
 
-           return Ok(hotel);
-       }
-       */
+
+
+
+       
 
 
 
