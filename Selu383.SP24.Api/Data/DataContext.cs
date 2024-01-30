@@ -3,9 +3,10 @@ using Selu383.SP24.Api.Entities;
 
 public class DataContext : DbContext
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
     public DbSet<Hotel> Hotels { get; set; }
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
