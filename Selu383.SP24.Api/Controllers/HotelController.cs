@@ -53,8 +53,8 @@ namespace Selu383.SP24.Api.Controllers
         }
         */
 
-        /*
-         
+        
+         /*
         [HttpPost]
         public ActionResult MakeHotel(HotelDto hotel)
         {
@@ -69,7 +69,7 @@ namespace Selu383.SP24.Api.Controllers
         [HttpGet("all")]
         public List<HotelDto> GetAllHotels()
         {
-            return
+            return DataContext.Set<Hotel>()
                 .Select(x => new HotelDto
                 {
                     Id = x.Id,
