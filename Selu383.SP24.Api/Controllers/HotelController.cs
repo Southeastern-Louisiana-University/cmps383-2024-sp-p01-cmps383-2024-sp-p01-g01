@@ -2,6 +2,7 @@
 using Selu383.SP24.Api.Entities;
 using Selu383.SP24.Api.Controllers;
 using Microsoft.EntityFrameworkCore;
+using Azure;
 
 namespace Selu383.SP24.Api.Controllers
 {
@@ -81,12 +82,60 @@ namespace Selu383.SP24.Api.Controllers
 
         }
 
+        [HttpPut("{id}")]
+        public ActionResult<HotelDto> Update(HotelDto Hotel, [FromRoute] int Id)
+        {
+            var HotelReturn = _context.Hotels.FirstOrDefault(x => x.Id == Id);
+
+            if (string.IsNullOrEmpty(Hotel.Name))
+            {
+                return BadRequest("Must have a name");
+            }
+            if (Hotel.Name.Length > 120)
+            {
+                return BadRequest("Name must not be longer than 120 characters");
+            }
+            if (string.IsNullOrEmpty(Hotel.Address))
+            {
+                return BadRequest("Must have an address");
+            }
+
+            HotelReturn.Name = Hotel.Name;
+            HotelReturn.Address = Hotel.Address;
+
+            _context.SaveChanges();
+
+            Hotel.Id = HotelReturn.Id;
+
+
+            return Ok(Hotel);
+
+        }
+
+        [HttpDelete]
+        [Route("{Id}")]
+        public ActionResult<HotelDto> DeleteHotel([FromRoute] int Id)
+        {
+
+            var HotelDelete = _context.Hotels.Find(Id);
+            if (HotelDelete == null)
+            {
+                return NotFound();
+            }
+            _context.Hotels.Remove(HotelDelete);
+            _context.SaveChanges();
+
+            
+
+
+            return Ok("Deleted.");
+        }
 
 
 
 
 
-       
+
 
 
 
