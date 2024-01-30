@@ -12,5 +12,24 @@ public class DataContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
 
+        modelBuilder.Entity<Hotel>()
+            .Property(x => x.Name)
+            .HasMaxLength(120);
+
+        modelBuilder.Entity<Hotel>()
+            .HasData(
+            new Hotel 
+            {
+                Id = 1, Name = "Marriott", Address = "3545 Pickle Avenue"
+            },
+            new Hotel 
+            {
+                Id = 2, Name = "Beachside", Address = "8888 Sunny Road"
+            },
+            new Hotel 
+            {
+                Id = 3, Name = "Hotel Vitality", Address = "1234 Jerry Lane"
+            }
+            );
     }
 }
