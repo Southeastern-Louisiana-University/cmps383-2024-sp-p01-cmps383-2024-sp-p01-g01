@@ -93,6 +93,11 @@ namespace Selu383.SP24.Api.Controllers
 
             var HotelToEdit = _context.Hotels.FirstOrDefault(x => x.Id == Id);
 
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
+            }
+
 
             if (HotelToEdit == null)
             {
@@ -102,22 +107,19 @@ namespace Selu383.SP24.Api.Controllers
             {
                 return NotFound(response);
             }
-            if (hotelDto.Name == null)
+            if (string.IsNullOrEmpty(hotelDto.Name))
             {
                 response.AddError("Name", "Name must be provided ");
+                return BadRequest(response);
+
             }
-            if (hotelDto.Name.Length > 120)
+            if (hotelDto.Name!.Length > 120)
             {
                 response.AddError("Name", "Name cannot be longer than 120 characters");
-            }
-            if (hotelDto.Name == "")
-            {
-                response.AddError("Name", "No name provided");
             }
             if (hotelDto.Address == null)
             {
                 response.AddError("Address", "Must have an address");
-
             }
             if (hotelDto.Address == "")
             {
