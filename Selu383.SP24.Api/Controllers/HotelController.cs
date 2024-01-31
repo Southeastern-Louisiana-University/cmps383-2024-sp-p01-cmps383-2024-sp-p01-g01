@@ -3,6 +3,9 @@ using Selu383.SP24.Api.Entities;
 using Selu383.SP24.Api.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Azure;
+using System.Net;
+using Selu383.SP24.Api.FixToPut;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Selu383.SP24.Api.Controllers
 {
@@ -18,6 +21,7 @@ namespace Selu383.SP24.Api.Controllers
             _logger = logger;
             _context = context;
         }
+
 
 
         [HttpGet]
@@ -83,33 +87,56 @@ namespace Selu383.SP24.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<HotelDto> Update(HotelDto Hotel, [FromRoute] int Id)
+        public IActionResult Edit(int Id, [FromBody] HotelDto hotelDto)
         {
-            var HotelReturn = _context.Hotels.FirstOrDefault(x => x.Id == Id);
+            var response = new FixToPut.Response();
 
-            if (string.IsNullOrEmpty(Hotel.Name))
+            var HotelToEdit = _context.Hotels.FirstOrDefault(x => x.Id == Id);
+
+
+            if (HotelToEdit == null)
             {
-                return BadRequest("Must have a name");
+                return NotFound();
             }
-            if (Hotel.Name.Length > 120)
+            if (hotelDto == null)
             {
-                return BadRequest("Name must not be longer than 120 characters");
+                return NotFound(response);
             }
-            if (string.IsNullOrEmpty(Hotel.Address))
+            if (hotelDto.Name == null)
             {
-                return BadRequest("Must have an address");
+                response.AddError("Name", "Name must be provided ");
+            }
+            if (hotelDto.Name.Length > 120)
+            {
+                response.AddError("Name", "Name cannot be longer than 120 characters");
+            }
+            if (hotelDto.Name == "")
+            {
+                response.AddError("Name", "No name provided");
+            }
+            if (hotelDto.Address == null)
+            {
+                response.AddError("Address", "Must have an address");
+
+            }
+            if (hotelDto.Address == "")
+            {
+                response.AddError("Address", "Must have address");
+            }
+            if (response.HasErrors)
+            {
+                return BadRequest(response);
             }
 
-            HotelReturn.Name = Hotel.Name;
-            HotelReturn.Address = Hotel.Address;
+            HotelToEdit.Name = hotelDto.Name;
+            HotelToEdit.Address = hotelDto.Address;
 
             _context.SaveChanges();
 
-            Hotel.Id = HotelReturn.Id;
+            hotelDto.Id = HotelToEdit.Id;
 
 
-            return Ok(Hotel);
-
+            return Ok(hotelDto);
         }
 
         [HttpDelete]
