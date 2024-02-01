@@ -45,7 +45,7 @@ public sealed class WebTestContext : IDisposable
         if (cleanNeeded)
         {
             webHostFactory.Dispose();
-            SqlServerTestDatabaseProvider.ClearData();
+            //SqlServerTestDatabaseProvider.ClearData();
             cleanNeeded = false;
         }
 
